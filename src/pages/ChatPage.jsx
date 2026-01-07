@@ -170,6 +170,8 @@ export default function ChatPage({ user, onLogout }) {
         message: savedInput,
       });
 
+      console.log("🔥 CHAT RESPONSE FULL:", res.data);
+      
       const aiMessage = {
         role: "assistant",
         content: res.data.reply,
