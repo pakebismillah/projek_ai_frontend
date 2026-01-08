@@ -15,7 +15,7 @@ export default function ChatPage({ user, onLogout }) {
   const [messages, setMessages] = useState({});
   const [inputText, setInputText] = useState("");
   const [loading, setLoading] = useState(false);
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [confirmDialog, setConfirmDialog] = useState({
     isOpen: false,
     type: "",
@@ -99,7 +99,8 @@ export default function ChatPage({ user, onLogout }) {
       type: "delete_session",
       data: sessionId,
       title: "Delete Conversation",
-      message: "Are you sure you want to delete this conversation? This action cannot be undone.",
+      message:
+        "Are you sure you want to delete this conversation? This action cannot be undone.",
     });
   };
 
@@ -171,7 +172,7 @@ export default function ChatPage({ user, onLogout }) {
       });
 
       console.log("🔥 CHAT RESPONSE FULL:", res.data);
-      
+
       const aiMessage = {
         role: "assistant",
         content: res.data.reply,
@@ -187,7 +188,8 @@ export default function ChatPage({ user, onLogout }) {
       // Update session title if it's new
       setSessions((prev) =>
         prev.map((s) =>
-          s.id === activeSessionId && (s.title === "New Conversation" || s.title === "Percakapan Baru")
+          s.id === activeSessionId &&
+          (s.title === "New Conversation" || s.title === "Percakapan Baru")
             ? {
                 ...s,
                 title:
@@ -257,20 +259,20 @@ export default function ChatPage({ user, onLogout }) {
   );
   const activeMessages = messages[activeSessionId] || [];
   return (
-   <div className="fixed inset-0 w-screen h-screen flex bg-gradient-to-br from-purple-50 via-indigo-50 to-pink-50 overflow-hidden">
-  {/* Animated Background Elements */}
+    <div className="fixed inset-0 w-screen h-screen flex bg-gradient-to-br from-purple-50 via-indigo-50 to-pink-50 overflow-hidden">
+      {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div 
+        <div
           className="absolute top-0 right-0 w-96 h-96 bg-purple-300/20 rounded-full blur-3xl"
-          style={{ animation: 'float 20s ease-in-out infinite' }}
+          style={{ animation: "float 20s ease-in-out infinite" }}
         ></div>
-        <div 
+        <div
           className="absolute bottom-0 left-0 w-96 h-96 bg-indigo-300/20 rounded-full blur-3xl"
-          style={{ animation: 'float 25s ease-in-out infinite reverse' }}
+          style={{ animation: "float 25s ease-in-out infinite reverse" }}
         ></div>
-        <div 
+        <div
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-pink-300/10 rounded-full blur-3xl"
-          style={{ animation: 'pulse 15s ease-in-out infinite' }}
+          style={{ animation: "pulse 15s ease-in-out infinite" }}
         ></div>
       </div>
 
@@ -285,23 +287,42 @@ export default function ChatPage({ user, onLogout }) {
           50% { opacity: 0.5; transform: translate(-50%, -50%) scale(1.1); }
         }
       `}</style>
-      {/* Sidebar */}
-      <div
-        className={`${
-          sidebarOpen ? "w-80" : "w-0"
-        } transition-all duration-300 flex-shrink-0`}
-      >
-        <Sidebar
-          sessions={sortedSessions}
-          activeSessionId={activeSessionId}
-          onSessionClick={setActiveSessionId}
-          onNewChat={createNewSession}
-          onDeleteSession={deleteSession}
-          onRenameSession={renameSession}
-          onTogglePin={togglePinSession}
-          isOpen={sidebarOpen}
-        />
-      </div>
+      {/* Sidebar Overlay */}
+<div
+  className={`
+    fixed inset-y-0 left-0 z-40
+    w-80
+    transform transition-transform duration-300
+    ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
+  `}
+>
+  <Sidebar
+    sessions={sortedSessions}
+    activeSessionId={activeSessionId}
+    onSessionClick={(id) => {
+      setActiveSessionId(id);
+      setSidebarOpen(false); // ⬅️ AUTO CLOSE (kayak ChatGPT)
+    }}
+    onNewChat={() => {
+      createNewSession();
+      setSidebarOpen(false);
+    }}
+    onDeleteSession={deleteSession}
+    onRenameSession={renameSession}
+    onTogglePin={togglePinSession}
+    isOpen={sidebarOpen}
+  />
+</div>
+
+{sidebarOpen && (
+  <div
+    onClick={() => setSidebarOpen(false)}
+    className="
+      fixed inset-0 z-30
+      bg-black/40 backdrop-blur-sm
+    "
+  />
+)}
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0 relative">
@@ -324,7 +345,7 @@ export default function ChatPage({ user, onLogout }) {
               onCopyMessage={copyMessage}
             />
           )}
-          
+
           {/* Loading Indicator */}
           {loading && (
             <div className="absolute bottom-4 left-6">

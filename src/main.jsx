@@ -9,8 +9,7 @@ document.body.classList.add(
   "bg-app-bg",
   "text-light-text",
   "dark:bg-dark-bg",
-  "dark:text-dark-text",
-  "font-sans"
+  "dark:text-dark-text"
 );
 
 createRoot(document.getElementById('root')).render(

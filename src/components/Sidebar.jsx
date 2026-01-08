@@ -9,18 +9,17 @@ export default function Sidebar({
   onNewChat,
   onDeleteSession,
   onRenameSession,
-  onTogglePin,
-  isOpen,
+  onTogglePin
 }) {
   return (
-    <div
-      className={`
-        ${isOpen ? "w-80" : "w-0"}
-        h-full bg-white/40 backdrop-blur-sm
-        transition-all duration-300 overflow-hidden flex flex-col 
-        border-r border-gray-200/60 shadow-sm
-      `}
-    >
+    <div className="
+  h-full w-80
+  bg-white/80 backdrop-blur
+  flex flex-col
+  border-r border-gray-200
+">
+
+
       {/* Header with New Chat Button */}
       <div className="flex-shrink-0 p-4 border-b border-gray-200/60 bg-white/30 backdrop-blur-sm">
         <button

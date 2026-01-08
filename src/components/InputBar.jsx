@@ -4,7 +4,6 @@ import { Send } from "lucide-react";
 export default function InputBar({ inputText, onInputChange, onSend, loading }) {
   const textareaRef = useRef(null);
 
-  // Auto resize textarea
   useEffect(() => {
     const textarea = textareaRef.current;
     if (textarea) {
@@ -21,56 +20,62 @@ export default function InputBar({ inputText, onInputChange, onSend, loading }) 
   };
 
   return (
-    <div className="
-      sticky bottom-0 
-      bg-white 
-      border-t border-gray-200 
-      p-4 
-      shadow-lg
-      z-20
-    ">
-      <div className="max-w-4xl mx-auto flex gap-4">
+    <div
+      className="
+        sticky bottom-0
+        bg-white
+        border-t border-gray-200
+        px-3 py-2
+        z-20
+        safe-bottom
+      "
+    >
+      <div className="max-w-4xl mx-auto flex gap-2 items-end">
         <textarea
           ref={textareaRef}
           value={inputText}
           onChange={(e) => onInputChange(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Type your message... (Shift + Enter for new line)"
+          placeholder="Type your message..."
+          rows={1}
+          disabled={loading}
           className="
-            flex-1 
-            px-4 py-3 
-            border border-gray-300 
-            rounded-xl 
-            focus:ring-2 focus:ring-blue-500 
-            focus:border-transparent 
-            outline-none 
-            resize-none 
+            flex-1
+            text-sm sm:text-base
+            px-3 py-2
+            border border-gray-300
+            rounded-xl
+            focus:ring-2 focus:ring-blue-500
+            outline-none
+            resize-none
             overflow-hidden
             bg-white
+            leading-relaxed
           "
-          rows={1}
-          style={{ minHeight: "48px", maxHeight: "200px" }}
-          disabled={loading}
+          style={{
+            minHeight: "44px",
+            maxHeight: "160px",
+          }}
         />
 
         <button
           onClick={onSend}
           disabled={!inputText.trim() || loading}
           className="
-            px-6 py-3 
-            bg-blue-600 text-white 
-            rounded-xl 
-            hover:bg-blue-700 
-            transition 
-            disabled:opacity-50 disabled:cursor-not-allowed 
-            flex items-center gap-2 
-            font-semibold
+            h-[44px]
+            px-4
+            bg-blue-600 text-white
+            rounded-xl
+            hover:bg-blue-700
+            transition
+            disabled:opacity-50
+            flex items-center justify-center
           "
         >
-          <Send size={20} />
-          Send
+          <Send size={18} />
         </button>
       </div>
     </div>
   );
 }
+
